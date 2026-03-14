@@ -23,10 +23,12 @@ pnpm build        # Build frontend
 
 ## Architecture
 
-- Frontend: Next.js 15 + Tremor + Tailwind (dark mode)
-- Backend: Modal (serverless Python)
+- Frontend: Next.js 15 + Recharts + Tailwind (dark mode)
+- Multimodal: MapLibre, Three.js, react-player, react-markdown, Prism
+- Backend: Modal (serverless Python) — 5 agent processes
 - Data: LanceDB (in-process, S3-backed)
 - AI: Claude via Anthropic API
+- Testing: Vitest + Testing Library (58 tests)
 
 ## Dashboard Layout Rules
 
