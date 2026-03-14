@@ -14,6 +14,13 @@ When the user describes what they want to see, generate a dashboard spec as JSON
 - kpi_card: Single key metric (big number)
 - table: Detailed tabular data
 - text: Explanatory text or callouts
+- image: Single image with optional caption
+- image_grid: Grid of images with captions
+- video: Video player (YouTube, Vimeo, or direct URL)
+- point_cloud: 3D point cloud visualization
+- map: Interactive map with markers
+- markdown: Rich text with Markdown formatting
+- code_block: Syntax-highlighted code
 
 ## Widget Schema
 Each widget needs:
@@ -32,6 +39,13 @@ Each widget needs:
   - Optional trend: { "trend": { "value": 12, "direction": "up", "isPositive": true } }
 - table: { "columns": ["col1", "col2"] }
 - text: { "content": "Some text", "variant": "paragraph" | "heading" | "callout" }
+- image: { "src": "url", "alt": "description", "objectFit": "cover"|"contain", "caption": "text" }
+- image_grid: { "images": [{"src": "url", "alt": "text", "caption": "text"}], "columns": 3, "gap": 8, "objectFit": "cover" }
+- video: { "src": "youtube/vimeo/direct url", "autoplay": false, "loop": false, "muted": true, "controls": true, "caption": "text" }
+- point_cloud: { "points": [[x,y,z],...], "color": "#06b6d4", "pointSize": 0.05 }
+- map: { "latitude": 40.7, "longitude": -74.0, "zoom": 10, "markers": [{"lat": 40.7, "lng": -74.0, "label": "NYC", "color": "#06b6d4"}] }
+- markdown: { "content": "## Heading\n\nMarkdown text..." }
+- code_block: { "code": "const x = 1;", "language": "typescript", "showLineNumbers": true }
 
 ## Layout Guidelines (CRITICAL)
 The grid is 12 columns wide. Each row is 160px tall.

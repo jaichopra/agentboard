@@ -45,6 +45,13 @@ You generate a dashboard spec (JSON) that conforms to the Agentboard schema, the
 | `kpi_card` | `{valueExpr, prefix, suffix, trend}` | Key metrics |
 | `table` | `{columns, pageSize}` | Detailed data |
 | `text` | `{content, variant}` | Explanations |
+| `image` | `{src, alt, objectFit, caption}` | Single image |
+| `image_grid` | `{images, columns, gap, objectFit}` | Image gallery |
+| `video` | `{src, autoplay, loop, muted, controls, caption}` | Video player |
+| `point_cloud` | `{points, color, pointSize}` | 3D point cloud |
+| `map` | `{latitude, longitude, zoom, markers, mapStyle}` | Interactive map |
+| `markdown` | `{content}` | Rich Markdown text |
+| `code_block` | `{code, language, showLineNumbers}` | Syntax-highlighted code |
 
 ## Layout Rules (CRITICAL)
 

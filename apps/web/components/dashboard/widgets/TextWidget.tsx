@@ -1,6 +1,7 @@
 "use client";
 
 import type { Widget } from "@/lib/schemas";
+import WidgetShell from "../WidgetShell";
 
 interface TextWidgetProps {
   widget: Widget;
@@ -12,12 +13,11 @@ export default function TextWidget({ widget, data }: TextWidgetProps) {
     content?: string;
     variant?: "paragraph" | "heading" | "callout";
   };
-
   const content = config.content || widget.description || "";
   const variant = config.variant || "paragraph";
 
   return (
-    <div className="flex h-full items-start rounded-xl border border-zinc-800/80 bg-zinc-900/60 p-5 backdrop-blur-sm">
+    <WidgetShell title={widget.title} noTitle={variant === "heading"}>
       {variant === "heading" && (
         <h2 className="text-xl font-bold text-zinc-50">{content}</h2>
       )}
@@ -29,6 +29,6 @@ export default function TextWidget({ widget, data }: TextWidgetProps) {
       {variant === "paragraph" && (
         <p className="text-sm leading-relaxed text-zinc-400">{content}</p>
       )}
-    </div>
+    </WidgetShell>
   );
 }

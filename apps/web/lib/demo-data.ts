@@ -1,5 +1,14 @@
 import type { DashboardSpec } from "./schemas";
 
+const SENSOR_DATA = [
+  { time: "00:00", temperature: 22.1, humidity: 45 },
+  { time: "04:00", temperature: 19.8, humidity: 52 },
+  { time: "08:00", temperature: 21.5, humidity: 48 },
+  { time: "12:00", temperature: 26.3, humidity: 38 },
+  { time: "16:00", temperature: 28.7, humidity: 33 },
+  { time: "20:00", temperature: 24.2, humidity: 41 },
+];
+
 const SALES_DATA = [
   { month: "Jan", revenue: 4200, units: 120 },
   { month: "Feb", revenue: 5100, units: 145 },
@@ -354,6 +363,160 @@ export const DEMO_DASHBOARDS: DashboardSpec[] = [
           index: "service",
           categories: ["cost"],
           colors: ["amber"],
+        },
+      },
+    ],
+  },
+  {
+    id: "demo-multimodal",
+    version: 1,
+    title: "Field Station Monitor",
+    description:
+      "Real-time environmental monitoring with multimodal data from remote field stations.",
+    author: "Agentboard Team",
+    createdAt: "2026-03-14T00:00:00Z",
+    updatedAt: "2026-03-14T00:00:00Z",
+    published: true,
+    tags: ["multimodal", "environmental", "iot"],
+    widgets: [
+      // Row 1: KPIs
+      {
+        id: "mm1",
+        type: "kpi_card",
+        title: "Avg Temperature",
+        layout: { column: 1, columnSpan: 3, row: 1, rowSpan: 1 },
+        dataSource: {
+          type: "static",
+          data: SENSOR_DATA,
+          refreshInterval: 0,
+        },
+        config: { valueExpr: "avg(temperature)", suffix: "°C" },
+      },
+      {
+        id: "mm2",
+        type: "kpi_card",
+        title: "Avg Humidity",
+        layout: { column: 4, columnSpan: 3, row: 1, rowSpan: 1 },
+        dataSource: {
+          type: "static",
+          data: SENSOR_DATA,
+          refreshInterval: 0,
+        },
+        config: { valueExpr: "avg(humidity)", suffix: "%" },
+      },
+      {
+        id: "mm3",
+        type: "kpi_card",
+        title: "Peak Temp",
+        layout: { column: 7, columnSpan: 3, row: 1, rowSpan: 1 },
+        dataSource: {
+          type: "static",
+          data: SENSOR_DATA,
+          refreshInterval: 0,
+        },
+        config: { valueExpr: "max(temperature)", suffix: "°C" },
+      },
+      {
+        id: "mm4",
+        type: "kpi_card",
+        title: "Active Stations",
+        layout: { column: 10, columnSpan: 3, row: 1, rowSpan: 1 },
+        dataSource: {
+          type: "static",
+          data: [{ count: 12 }],
+          refreshInterval: 0,
+        },
+        config: { valueExpr: "sum(count)" },
+      },
+      // Row 2-4: Chart + Map
+      {
+        id: "mm5",
+        type: "area_chart",
+        title: "Temperature & Humidity",
+        layout: { column: 1, columnSpan: 6, row: 2, rowSpan: 3 },
+        dataSource: {
+          type: "static",
+          data: SENSOR_DATA,
+          refreshInterval: 0,
+        },
+        config: {
+          index: "time",
+          categories: ["temperature", "humidity"],
+          colors: ["emerald", "cyan"],
+        },
+      },
+      {
+        id: "mm6",
+        type: "map",
+        title: "Station Locations",
+        layout: { column: 7, columnSpan: 6, row: 2, rowSpan: 3 },
+        dataSource: { type: "static", data: [], refreshInterval: 0 },
+        config: {
+          latitude: 37.65,
+          longitude: -122.25,
+          zoom: 10,
+          markers: [
+            { lat: 37.7749, lng: -122.4194, label: "Station Alpha", color: "#10b981" },
+            { lat: 37.8716, lng: -122.2727, label: "Station Beta", color: "#06b6d4" },
+            { lat: 37.5585, lng: -122.2711, label: "Station Gamma", color: "#8b5cf6" },
+            { lat: 37.4419, lng: -122.143, label: "Station Delta", color: "#f59e0b" },
+          ],
+        },
+      },
+      // Row 5-7: Image + Markdown
+      {
+        id: "mm7",
+        type: "image",
+        title: "Latest Satellite Image",
+        layout: { column: 1, columnSpan: 6, row: 5, rowSpan: 3 },
+        dataSource: { type: "static", data: [], refreshInterval: 0 },
+        config: {
+          src: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&q=80",
+          alt: "Satellite view of Earth at night",
+          objectFit: "cover",
+          caption: "Composite satellite imagery — updated every 6 hours",
+        },
+      },
+      {
+        id: "mm8",
+        type: "markdown",
+        title: "Station Notes",
+        layout: { column: 7, columnSpan: 6, row: 5, rowSpan: 3 },
+        dataSource: { type: "static", data: [], refreshInterval: 0 },
+        config: {
+          content:
+            "## Weekly Summary\n\nAll stations reporting **nominal readings** this week.\n\n### Alerts\n- Station Delta: humidity sensor calibration due **March 20**\n- Station Beta: solar panel efficiency at 87%\n\n### Data Quality\n| Station | Uptime | Completeness |\n|---------|--------|--------------|\n| Alpha   | 99.9%  | 100%         |\n| Beta    | 99.7%  | 99.8%        |\n| Gamma   | 100%   | 100%         |\n| Delta   | 98.2%  | 97.5%        |",
+        },
+      },
+      // Row 8-9: Code block + Image grid
+      {
+        id: "mm9",
+        type: "code_block",
+        title: "Ingestion Pipeline",
+        layout: { column: 1, columnSpan: 6, row: 8, rowSpan: 2 },
+        dataSource: { type: "static", data: [], refreshInterval: 0 },
+        config: {
+          code: 'from agentboard import DataPipeline\n\npipeline = DataPipeline(\n    name="sensor-ingestion",\n    source="mqtt://gateway.field.local:1883",\n    topic="sensors/+/readings",\n    transform=lambda batch: [\n        {\n            "station": msg["device_id"],\n            "temperature": msg["temp_c"],\n            "humidity": msg["rh_pct"],\n        }\n        for msg in batch\n    ],\n    schedule="*/5 * * * *",\n)\n\npipeline.deploy()',
+          language: "python",
+          showLineNumbers: true,
+        },
+      },
+      {
+        id: "mm10",
+        type: "image_grid",
+        title: "Station Photos",
+        layout: { column: 7, columnSpan: 6, row: 8, rowSpan: 2 },
+        dataSource: { type: "static", data: [], refreshInterval: 0 },
+        config: {
+          images: [
+            { src: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=400&q=80", alt: "Field station morning", caption: "Alpha" },
+            { src: "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=400&q=80", alt: "Forest canopy", caption: "Beta" },
+            { src: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=400&q=80", alt: "Sunlit forest", caption: "Gamma" },
+            { src: "https://images.unsplash.com/photo-1518173946687-a1e1e5a66e84?w=400&q=80", alt: "Mountain station", caption: "Delta" },
+          ],
+          columns: 2,
+          gap: 8,
+          objectFit: "cover",
         },
       },
     ],

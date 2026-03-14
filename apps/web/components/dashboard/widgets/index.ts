@@ -1,3 +1,4 @@
+import dynamic from "next/dynamic";
 import type { ComponentType } from "react";
 import type { Widget, WidgetType } from "@/lib/schemas";
 import AreaChartWidget from "./AreaChartWidget";
@@ -7,6 +8,15 @@ import KPICardWidget from "./KPICardWidget";
 import LineChartWidget from "./LineChartWidget";
 import TableWidget from "./TableWidget";
 import TextWidget from "./TextWidget";
+import ImageWidget from "./ImageWidget";
+import ImageGridWidget from "./ImageGridWidget";
+import MarkdownWidget from "./MarkdownWidget";
+import CodeBlockWidget from "./CodeBlockWidget";
+
+// Dynamically imported widgets (heavy deps, SSR-incompatible)
+const VideoWidget = dynamic(() => import("./VideoWidget"), { ssr: false });
+const PointCloudWidget = dynamic(() => import("./PointCloudWidget"), { ssr: false });
+const MapWidget = dynamic(() => import("./MapWidget"), { ssr: false });
 
 export interface WidgetProps {
   widget: Widget;
@@ -24,9 +34,11 @@ export const WIDGET_REGISTRY: Record<
   kpi_card: KPICardWidget,
   table: TableWidget,
   text: TextWidget,
-  // Placeholder — these render as text for now
-  combo_chart: BarChartWidget,
-  spark_chart: LineChartWidget,
-  tracker: TableWidget,
-  progress_bar: KPICardWidget,
+  image: ImageWidget,
+  image_grid: ImageGridWidget,
+  video: VideoWidget,
+  point_cloud: PointCloudWidget,
+  map: MapWidget,
+  markdown: MarkdownWidget,
+  code_block: CodeBlockWidget,
 };

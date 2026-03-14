@@ -8,10 +8,13 @@ export const WIDGET_TYPES = [
   "kpi_card",
   "table",
   "text",
-  "combo_chart",
-  "spark_chart",
-  "tracker",
-  "progress_bar",
+  "image",
+  "image_grid",
+  "video",
+  "point_cloud",
+  "map",
+  "markdown",
+  "code_block",
 ] as const;
 
 export type WidgetType = (typeof WIDGET_TYPES)[number];
@@ -75,11 +78,75 @@ export const TextConfigSchema = z.object({
   variant: z.enum(["paragraph", "heading", "callout"]).optional(),
 });
 
+export const ImageConfigSchema = z.object({
+  src: z.string().optional(),
+  alt: z.string().optional(),
+  objectFit: z.enum(["cover", "contain", "fill", "none"]).optional(),
+  caption: z.string().optional(),
+});
+
+export const ImageGridConfigSchema = z.object({
+  images: z.array(z.object({
+    src: z.string(),
+    alt: z.string().optional(),
+    caption: z.string().optional(),
+  })).optional(),
+  columns: z.number().optional(),
+  gap: z.number().optional(),
+  objectFit: z.enum(["cover", "contain"]).optional(),
+});
+
+export const VideoConfigSchema = z.object({
+  src: z.string().optional(),
+  autoplay: z.boolean().optional(),
+  loop: z.boolean().optional(),
+  muted: z.boolean().optional(),
+  controls: z.boolean().optional(),
+  caption: z.string().optional(),
+});
+
+export const PointCloudConfigSchema = z.object({
+  points: z.array(z.array(z.number())).optional(),
+  color: z.string().optional(),
+  pointSize: z.number().optional(),
+  backgroundColor: z.string().optional(),
+});
+
+export const MapConfigSchema = z.object({
+  latitude: z.number().optional(),
+  longitude: z.number().optional(),
+  zoom: z.number().optional(),
+  markers: z.array(z.object({
+    lat: z.number(),
+    lng: z.number(),
+    label: z.string().optional(),
+    color: z.string().optional(),
+  })).optional(),
+  mapStyle: z.string().optional(),
+});
+
+export const MarkdownConfigSchema = z.object({
+  content: z.string().optional(),
+});
+
+export const CodeBlockConfigSchema = z.object({
+  code: z.string().optional(),
+  language: z.string().optional(),
+  showLineNumbers: z.boolean().optional(),
+});
+
 export const WidgetConfigSchema = z.union([
   ChartConfigSchema,
   KPIConfigSchema,
   TableConfigSchema,
   TextConfigSchema,
+  ImageConfigSchema,
+  ImageGridConfigSchema,
+  VideoConfigSchema,
+  PointCloudConfigSchema,
+  MapConfigSchema,
+  MarkdownConfigSchema,
+  CodeBlockConfigSchema,
   z.record(z.unknown()),
 ]);
 

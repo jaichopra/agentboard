@@ -175,3 +175,127 @@ class Widget:
             layout,
             {"content": content, "variant": variant},
         )
+
+    @classmethod
+    def image(
+        cls,
+        title: str,
+        src: str,
+        layout: dict[str, int],
+        alt: str = "",
+        object_fit: str = "cover",
+        caption: str = "",
+    ) -> WidgetSpec:
+        config: dict[str, Any] = {"src": src, "objectFit": object_fit}
+        if alt:
+            config["alt"] = alt
+        if caption:
+            config["caption"] = caption
+        return cls._make("image", title, DataPipeline.static([]), layout, config)
+
+    @classmethod
+    def image_grid(
+        cls,
+        title: str,
+        images: list[dict[str, str]],
+        layout: dict[str, int],
+        columns: int = 3,
+        gap: int = 8,
+        object_fit: str = "cover",
+    ) -> WidgetSpec:
+        return cls._make(
+            "image_grid",
+            title,
+            DataPipeline.static([]),
+            layout,
+            {"images": images, "columns": columns, "gap": gap, "objectFit": object_fit},
+        )
+
+    @classmethod
+    def video(
+        cls,
+        title: str,
+        src: str,
+        layout: dict[str, int],
+        autoplay: bool = False,
+        loop: bool = False,
+        muted: bool = True,
+        controls: bool = True,
+        caption: str = "",
+    ) -> WidgetSpec:
+        config: dict[str, Any] = {
+            "src": src,
+            "autoplay": autoplay,
+            "loop": loop,
+            "muted": muted,
+            "controls": controls,
+        }
+        if caption:
+            config["caption"] = caption
+        return cls._make("video", title, DataPipeline.static([]), layout, config)
+
+    @classmethod
+    def map(
+        cls,
+        title: str,
+        markers: list[dict[str, Any]],
+        layout: dict[str, int],
+        latitude: float | None = None,
+        longitude: float | None = None,
+        zoom: int = 10,
+    ) -> WidgetSpec:
+        config: dict[str, Any] = {"markers": markers, "zoom": zoom}
+        if latitude is not None:
+            config["latitude"] = latitude
+        if longitude is not None:
+            config["longitude"] = longitude
+        return cls._make("map", title, DataPipeline.static([]), layout, config)
+
+    @classmethod
+    def markdown(
+        cls,
+        title: str,
+        content: str,
+        layout: dict[str, int],
+    ) -> WidgetSpec:
+        return cls._make(
+            "markdown",
+            title,
+            DataPipeline.static([]),
+            layout,
+            {"content": content},
+        )
+
+    @classmethod
+    def code_block(
+        cls,
+        title: str,
+        code: str,
+        layout: dict[str, int],
+        language: str = "python",
+        show_line_numbers: bool = True,
+    ) -> WidgetSpec:
+        return cls._make(
+            "code_block",
+            title,
+            DataPipeline.static([]),
+            layout,
+            {"code": code, "language": language, "showLineNumbers": show_line_numbers},
+        )
+
+    @classmethod
+    def point_cloud(
+        cls,
+        title: str,
+        data_pipeline: DataPipeline,
+        layout: dict[str, int],
+        color: str = "#06b6d4",
+        point_size: float = 0.05,
+    ) -> WidgetSpec:
+        return cls._make(
+            "point_cloud",
+            title,
+            data_pipeline,
+            layout,
+            {"color": color, "pointSize": point_size},
+        )

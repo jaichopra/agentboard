@@ -1,37 +1,25 @@
 "use client";
 
 import type { Widget } from "@/lib/schemas";
+import WidgetShell from "../WidgetShell";
 
 interface KPICardWidgetProps {
   widget: Widget;
   data: Record<string, unknown>[];
 }
 
-function evaluateExpr(
-  data: Record<string, unknown>[],
-  expr: string
-): number {
+function evaluateExpr(data: Record<string, unknown>[], expr: string): number {
   const match = expr.match(/^(sum|avg|count|min|max)\((\w+)\)$/);
   if (!match) return 0;
-
   const [, fn, col] = match;
   const values = data.map((r) => Number(r[col]) || 0);
-
   switch (fn) {
-    case "sum":
-      return values.reduce((a, b) => a + b, 0);
-    case "avg":
-      return values.length
-        ? values.reduce((a, b) => a + b, 0) / values.length
-        : 0;
-    case "count":
-      return values.length;
-    case "min":
-      return Math.min(...values);
-    case "max":
-      return Math.max(...values);
-    default:
-      return 0;
+    case "sum": return values.reduce((a, b) => a + b, 0);
+    case "avg": return values.length ? values.reduce((a, b) => a + b, 0) / values.length : 0;
+    case "count": return values.length;
+    case "min": return Math.min(...values);
+    case "max": return Math.max(...values);
+    default: return 0;
   }
 }
 
@@ -44,22 +32,13 @@ export default function KPICardWidget({ widget, data }: KPICardWidgetProps) {
   };
 
   const value = config.valueExpr ? evaluateExpr(data, config.valueExpr) : 0;
-  const formatted = value.toLocaleString(undefined, {
-    maximumFractionDigits: 1,
-  });
+  const formatted = value.toLocaleString(undefined, { maximumFractionDigits: 1 });
 
   return (
-    <div className="flex h-full flex-col justify-between rounded-xl border border-zinc-800/80 bg-zinc-900/60 p-5 backdrop-blur-sm">
-      <div>
-        <p className="text-xs font-medium uppercase tracking-wider text-zinc-500">
-          {widget.title}
-        </p>
-      </div>
+    <WidgetShell title={widget.title} labelTitle>
       <div>
         <p className="text-4xl font-bold tracking-tight text-zinc-50">
-          {config.prefix}
-          {formatted}
-          {config.suffix}
+          {config.prefix}{formatted}{config.suffix}
         </p>
         {config.trend && (
           <div className="mt-2 flex items-center gap-1.5">
@@ -70,12 +49,11 @@ export default function KPICardWidget({ widget, data }: KPICardWidgetProps) {
                   : "bg-red-500/10 text-red-400"
               }`}
             >
-              {config.trend.direction === "up" ? "\u2191" : "\u2193"}{" "}
-              {config.trend.value}%
+              {config.trend.direction === "up" ? "\u2191" : "\u2193"} {config.trend.value}%
             </span>
           </div>
         )}
       </div>
-    </div>
+    </WidgetShell>
   );
 }
