@@ -20,8 +20,8 @@ export default function WidgetRenderer({
 
   if (!Component) {
     return (
-      <div className="flex h-full items-center justify-center rounded-lg border border-red-800/50 bg-red-950/20 p-4">
-        <p className="text-sm text-red-400">
+      <div className="flex h-full items-center justify-center rounded-xl border border-red-900/50 bg-red-950/10 p-5">
+        <p className="text-sm text-red-400/80">
           Unknown widget type: {widget.type}
         </p>
       </div>
@@ -30,9 +30,9 @@ export default function WidgetRenderer({
 
   if (isLoading) {
     return (
-      <div className="flex h-full items-center justify-center rounded-lg border border-zinc-800 bg-zinc-900/50 p-4">
-        <div className="flex items-center gap-2 text-sm text-zinc-500">
-          <div className="h-4 w-4 animate-spin rounded-full border-2 border-zinc-600 border-t-green-400" />
+      <div className="flex h-full items-center justify-center rounded-xl border border-zinc-800/80 bg-zinc-900/60 p-5">
+        <div className="flex items-center gap-2.5 text-sm text-zinc-500">
+          <div className="h-4 w-4 animate-spin rounded-full border-2 border-zinc-700 border-t-green-500" />
           Loading...
         </div>
       </div>
@@ -41,8 +41,8 @@ export default function WidgetRenderer({
 
   if (error) {
     return (
-      <div className="flex h-full items-center justify-center rounded-lg border border-red-800/50 bg-red-950/20 p-4">
-        <p className="text-sm text-red-400">{error}</p>
+      <div className="flex h-full items-center justify-center rounded-xl border border-red-900/50 bg-red-950/10 p-5">
+        <p className="text-sm text-red-400/80">{error}</p>
       </div>
     );
   }

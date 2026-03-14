@@ -21,7 +21,9 @@ function evaluateExpr(
     case "sum":
       return values.reduce((a, b) => a + b, 0);
     case "avg":
-      return values.length ? values.reduce((a, b) => a + b, 0) / values.length : 0;
+      return values.length
+        ? values.reduce((a, b) => a + b, 0) / values.length
+        : 0;
     case "count":
       return values.length;
     case "min":
@@ -42,26 +44,38 @@ export default function KPICardWidget({ widget, data }: KPICardWidgetProps) {
   };
 
   const value = config.valueExpr ? evaluateExpr(data, config.valueExpr) : 0;
-  const formatted = value.toLocaleString();
+  const formatted = value.toLocaleString(undefined, {
+    maximumFractionDigits: 1,
+  });
 
   return (
-    <div className="flex h-full flex-col justify-center rounded-lg border border-zinc-800 bg-zinc-900/50 p-6">
-      <p className="text-sm font-medium text-zinc-400">{widget.title}</p>
-      <p className="mt-2 text-3xl font-bold text-zinc-50">
-        {config.prefix}
-        {formatted}
-        {config.suffix}
-      </p>
-      {config.trend && (
-        <p
-          className={`mt-1 text-sm ${
-            config.trend.isPositive ? "text-green-400" : "text-red-400"
-          }`}
-        >
-          {config.trend.direction === "up" ? "+" : ""}
-          {config.trend.value}%
+    <div className="flex h-full flex-col justify-between rounded-xl border border-zinc-800/80 bg-zinc-900/60 p-5 backdrop-blur-sm">
+      <div>
+        <p className="text-xs font-medium uppercase tracking-wider text-zinc-500">
+          {widget.title}
         </p>
-      )}
+      </div>
+      <div>
+        <p className="text-4xl font-bold tracking-tight text-zinc-50">
+          {config.prefix}
+          {formatted}
+          {config.suffix}
+        </p>
+        {config.trend && (
+          <div className="mt-2 flex items-center gap-1.5">
+            <span
+              className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${
+                config.trend.isPositive
+                  ? "bg-green-500/10 text-green-400"
+                  : "bg-red-500/10 text-red-400"
+              }`}
+            >
+              {config.trend.direction === "up" ? "\u2191" : "\u2193"}{" "}
+              {config.trend.value}%
+            </span>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

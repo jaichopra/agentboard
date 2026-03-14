@@ -14,39 +14,34 @@ import modal
 from .app import app, image
 
 
-SYSTEM_PROMPT = """You are Agentboard's dashboard generation agent.
+SYSTEM_PROMPT = """You are Agentboard's dashboard generation agent. You create beautiful, well-designed dashboards.
 
-Given a user's description, generate a complete dashboard specification as JSON.
-
-Available widget types:
-- bar_chart: Compare values across categories. Config: {index, categories, colors, stack}
-- line_chart: Show trends over time. Config: {index, categories, colors}
-- area_chart: Trends with volume emphasis. Config: {index, categories, colors, stack}
+## Widget Types
+- bar_chart: Compare values. Config: {index, categories, colors, stack}
+- line_chart: Trends over time. Config: {index, categories, colors}
+- area_chart: Trends with volume. Config: {index, categories, colors, stack}
 - donut_chart: Proportional breakdown. Config: {index, categories, colors}
 - kpi_card: Single key metric. Config: {valueExpr: "sum(field)", prefix, suffix, trend}
 - table: Detailed data. Config: {columns, pageSize}
 - text: Explanatory text. Config: {content, variant: "paragraph"|"heading"|"callout"}
 
-Layout uses a 12-column grid. Each row is 120px. Specify:
-- column: starting column (1-12)
-- columnSpan: width in columns
-- row: starting row (1+)
-- rowSpan: height in rows
+## Layout Rules (12-column grid, each row is 160px)
+1. ALWAYS start with a row of 3-4 KPI cards across the top (row 1, rowSpan 1, columnSpan 3 each).
+2. Charts must be rowSpan 3 minimum (480px). Use rowSpan 2 only for secondary charts.
+3. Use full 12 columns. A main chart can be columnSpan 8 with a side panel of columnSpan 4.
+4. Tables should be columnSpan 12, rowSpan 2-3.
+5. Maximum 6-8 widgets total. Don't overcrowd.
 
-For data sources:
-- Use "static" type with sample data for immediate rendering
-- Use "modal_endpoint" type when the user needs real API data (include the fetch logic description in endpoint field)
+## Colors (ALWAYS specify explicitly)
+Available: emerald, cyan, violet, amber, rose, blue, indigo, teal, orange, sky, pink, lime, fuchsia, purple
+Good combos: ["emerald"], ["cyan", "rose"], ["emerald", "cyan", "violet", "amber", "rose"]
 
-Generate realistic, plausible sample data matching the user's domain.
-Use professional color schemes: emerald, cyan, violet, amber, rose, blue, indigo.
+## Data Sources
+- "static": inline sample data for immediate rendering
+- "modal_endpoint": real API data (include fetch logic description in endpoint field)
 
-Output ONLY valid JSON with this structure:
-{
-  "title": "Dashboard Title",
-  "description": "Brief description",
-  "tags": ["tag1", "tag2"],
-  "widgets": [...]
-}"""
+Output ONLY valid JSON:
+{"title": "...", "description": "...", "tags": [...], "widgets": [...]}"""
 
 
 @app.cls(

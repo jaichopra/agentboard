@@ -17,12 +17,12 @@ export default function TextWidget({ widget, data }: TextWidgetProps) {
   const variant = config.variant || "paragraph";
 
   return (
-    <div className="flex h-full items-start rounded-lg border border-zinc-800 bg-zinc-900/50 p-6">
+    <div className="flex h-full items-start rounded-xl border border-zinc-800/80 bg-zinc-900/60 p-5 backdrop-blur-sm">
       {variant === "heading" && (
         <h2 className="text-xl font-bold text-zinc-50">{content}</h2>
       )}
       {variant === "callout" && (
-        <div className="w-full rounded-md border border-green-800/50 bg-green-950/30 p-4 text-green-300">
+        <div className="w-full rounded-lg border border-green-800/40 bg-green-950/20 p-4 text-sm leading-relaxed text-green-300">
           {content}
         </div>
       )}

@@ -16,21 +16,25 @@ export default function DashboardRenderer({
   loadingWidgets,
   widgetErrors,
 }: DashboardRendererProps) {
-  const maxRow = Math.max(...spec.widgets.map((w) => w.layout.row + w.layout.rowSpan - 1));
+  const maxRow = Math.max(
+    ...spec.widgets.map((w) => w.layout.row + w.layout.rowSpan - 1)
+  );
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-6">
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold text-zinc-50">{spec.title}</h1>
+    <div className="mx-auto max-w-[1400px] px-6 py-8">
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold tracking-tight text-zinc-50">
+          {spec.title}
+        </h1>
         {spec.description && (
-          <p className="mt-1 text-sm text-zinc-400">{spec.description}</p>
+          <p className="mt-2 text-sm text-zinc-500">{spec.description}</p>
         )}
         {spec.tags.length > 0 && (
-          <div className="mt-2 flex gap-2">
+          <div className="mt-3 flex gap-2">
             {spec.tags.map((tag) => (
               <span
                 key={tag}
-                className="rounded-full bg-zinc-800 px-2 py-0.5 text-xs text-zinc-400"
+                className="rounded-full border border-zinc-700/50 bg-zinc-800/50 px-2.5 py-0.5 text-xs font-medium text-zinc-400"
               >
                 {tag}
               </span>
@@ -40,10 +44,10 @@ export default function DashboardRenderer({
       </div>
 
       <div
-        className="grid gap-4"
+        className="grid gap-5"
         style={{
           gridTemplateColumns: "repeat(12, 1fr)",
-          gridTemplateRows: `repeat(${maxRow}, 120px)`,
+          gridTemplateRows: `repeat(${maxRow}, 160px)`,
         }}
       >
         {spec.widgets.map((widget) => (
